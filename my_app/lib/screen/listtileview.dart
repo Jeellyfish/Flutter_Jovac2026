@@ -14,13 +14,13 @@ class ListTileWidget extends StatelessWidget {
         children: [
           ListTile(
           leading: CircleAvatar(
-            child: Icon(Icons.person),
+            child: Icon(Icons.fastfood_rounded),
           ),
           title:Text("Pankaj Kapoor", style: TextStyle(
             fontWeight: FontWeight.bold
           ),),
           subtitle: Text("9729280731"),
-          trailing: Icon(Icons.arrow_forward_ios, ),
+          trailing: Icon(Icons.shopping_cart_outlined, ),
           onTap: (){
             print("Open this Contact");
           },
@@ -33,7 +33,7 @@ class ListTileWidget extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),),
           subtitle: Text("9729280731"),
-          trailing: Icon(Icons.arrow_forward_ios, ),
+          trailing: Icon(Icons.shopping_cart_outlined, ),
           onTap: (){
             print("Open this Contact");
           },
@@ -46,7 +46,7 @@ class ListTileWidget extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),),
           subtitle: Text("9729280731"),
-          trailing: Icon(Icons.arrow_forward_ios, ),
+          trailing: Icon(Icons.shopping_cart_outlined, ),
           onTap: (){
             print("Open this Contact");
           },
@@ -59,7 +59,7 @@ class ListTileWidget extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),),
           subtitle: Text("9729280731"),
-          trailing: Icon(Icons.arrow_forward_ios, ),
+          trailing: Icon(Icons.shopping_cart_outlined, ),
           onTap: (){
             print("Open this Contact");
           },
@@ -72,7 +72,7 @@ class ListTileWidget extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),),
           subtitle: Text("9729280731"),
-          trailing: Icon(Icons.arrow_forward_ios, ),
+          trailing: Icon(Icons.shopping_cart_outlined, ),
           onTap: (){
             print("Open this Contact");
           },
@@ -85,7 +85,7 @@ class ListTileWidget extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),),
           subtitle: Text("9729280731"),
-          trailing: Icon(Icons.arrow_forward_ios, ),
+          trailing: Icon(Icons.shopping_cart_outlined, ),
           onTap: (){
             print("Open this Contact");
           },
@@ -98,7 +98,7 @@ class ListTileWidget extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),),
           subtitle: Text("9729280731"),
-          trailing: Icon(Icons.arrow_forward_ios, ),
+          trailing: Icon(Icons.shopping_cart_outlined, ),
           onTap: (){
             print("Open this Contact");
           },
@@ -111,7 +111,7 @@ class ListTileWidget extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),),
           subtitle: Text("9729280731"),
-          trailing: Icon(Icons.arrow_forward_ios, ),
+          trailing: Icon(Icons.shopping_cart_outlined, ),
           onTap: (){
             print("Open this Contact");
           },
@@ -124,7 +124,7 @@ class ListTileWidget extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),),
           subtitle: Text("9729280731"),
-          trailing: Icon(Icons.arrow_forward_ios, ),
+          trailing: Icon(Icons.shopping_cart_outlined, ),
           onTap: (){
             print("Open this Contact");
           },
@@ -137,7 +137,7 @@ class ListTileWidget extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),),
           subtitle: Text("9729280731"),
-          trailing: Icon(Icons.arrow_forward_ios, ),
+          trailing: Icon(Icons.shopping_cart_outlined, ),
           onTap: (){
             print("Open this Contact");
           },

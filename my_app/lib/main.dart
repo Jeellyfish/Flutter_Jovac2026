@@ -9,6 +9,8 @@ import "screen/spacer.dart";
 import "screen/align_widget.dart";
 import "screen/wrap_widget.dart";
 import "screen/expanded_widget.dart";
+import "screen/listview_widget.dart";
+import "screen/listtileview.dart";
 
 
 void main(){
@@ -34,9 +36,10 @@ class MyApp extends StatelessWidget {
       // home:ExpandedWidget(),
       // home:FlexibleWidget(),
       // home:ListViewWidget(),
-      // home:ListTileWidget(),
+      home:ListTileWidget()
       // home:CardWidget(),
       // home:InkWellWidget(),
+
     );
   }
 }

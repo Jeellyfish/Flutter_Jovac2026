@@ -16,7 +16,7 @@ class ListViewWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Icon(Icons.settings, size:30, color: Colors.blue,), 
+                Icon(Icons.settings, size:30, color: Colors.blue,),
                 SizedBox(width: 20,),
                 Text("Setting", style: TextStyle(
                   fontSize: 20, fontWeight: FontWeight.w500
@@ -38,7 +38,7 @@ class ListViewWidget extends StatelessWidget {
               ],
             ),
           ),
-         const Divider(),
+          const Divider(),
           Padding(
             padding: const EdgeInsets.all(15),
             child: Row(
