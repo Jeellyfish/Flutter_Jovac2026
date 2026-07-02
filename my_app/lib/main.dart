@@ -8,6 +8,7 @@ import "screen/stack_widget.dart";
 import "screen/spacer.dart";
 import "screen/align_widget.dart";
 import "screen/wrap_widget.dart";
+import "screen/expanded_widget.dart";
 
 
 void main(){
@@ -29,7 +30,13 @@ class MyApp extends StatelessWidget {
       // home:StackWidget(),
       // home:SpacerWidget(),
       // home:AlignWidget(),
-      home:WrapWidget(),
+      // home:WrapWidget()
+      // home:ExpandedWidget(),
+      // home:FlexibleWidget(),
+      // home:ListViewWidget(),
+      // home:ListTileWidget(),
+      // home:CardWidget(),
+      // home:InkWellWidget(),
     );
   }
 }
