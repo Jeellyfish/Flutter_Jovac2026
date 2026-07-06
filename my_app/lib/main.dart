@@ -11,7 +11,9 @@ import "package:flutter/material.dart";
 // import "screen/expanded_widget.dart";
 // import "screen/listview_widget.dart";
 // import "screen/listtileview.dart";
-import "screen/student_idcard.dart";
+// import "screen/student_idcard.dart";\
+// import 'package:flutter/material.dart';
+import 'package:my_app/screen/homescreen.dart';
 
 
 void main(){
@@ -40,7 +42,8 @@ class MyApp extends StatelessWidget {
       // home:ListTileWidget()
       // home:CardWidget(),
       // home:InkWellWidget(),
-      home: const StudentIDCard()
+      // home: const StudentIDCard(),
+      home: const HomeScreen()
 
     );
   }
