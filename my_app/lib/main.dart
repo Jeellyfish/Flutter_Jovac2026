@@ -14,7 +14,8 @@ import "package:flutter/material.dart";
 // import "screen/student_idcard.dart";\
 // import 'package:flutter/material.dart';
 // import 'package:my_app/screen/homescreen.dart';
-import "package:my_app/screen/food_card.dart";
+// import "package:my_app/screen/food_card.dart";
+import "package:my_app/screen/stack_task.dart";
 
 
 void main(){
@@ -45,8 +46,9 @@ class MyApp extends StatelessWidget {
       // home:InkWellWidget(),
       // home: const StudentIDCard(),
       // home: const HomeScreen(),
-      home: const FoodCard()
-
+      // home: const HomeScreen3(),
+      // home: const FoodCard()
+      home: const ProfileAvatarScreen()
     );
   }
 }
