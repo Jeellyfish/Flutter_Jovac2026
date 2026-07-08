@@ -15,13 +15,17 @@ import "package:flutter/material.dart";
 // import 'package:flutter/material.dart';
 // import 'package:my_app/screen/homescreen.dart';
 // import "package:my_app/screen/food_card.dart";
-import "package:my_app/screen/stack_task.dart";
-import "package:my_app/screen/Navigation/screen1.dart";
-import "package:my_app/screen/Navigation/screen2.dart";
-import "package:my_app/screen/Navigation/screen3.dart";
-import "package:my_app/screen/Navigation/push_navigation.dart";
-import "package:my_app/screen/Navigation/home_screen.dart";
-
+// import "package:my_app/screen/stack_task.dart";
+// import "package:my_app/screen/Navigation/screen1.dart";
+// import "package:my_app/screen/Navigation/screen2.dart";
+// import "package:my_app/screen/Navigation/screen3.dart";
+// import "package:my_app/screen/Navigation/push_navigation.dart";
+// import "package:my_app/screen/Navigation/home_screen.dart";
+// import "package:my_app/screen/Navigation/tabbar_navigation.dart";
+// import "package:my_app/screen/Navigation/pass_data_screen1.dart";
+// import "package:my_app/screen/Navigation/pass_data_screen2.dart";
+// import "package:my_app/screen/Navigation/tabbar_navigation.dart";
+// import "package:my_app/screen/Navigation/profile_avatar_screen.dart
 void main(){
   runApp(MyApp());
 }
@@ -52,7 +56,7 @@ class MyApp extends StatelessWidget {
       // home: const HomeScreen(),
       // home: const HomeScreen3(),
       // home: const FoodCard()
-      home: const ProfileAvatarScreen()
+      // home: const ProfileAvatarScreen(),
     );
   }
 }
