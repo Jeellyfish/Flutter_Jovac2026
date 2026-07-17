@@ -31,7 +31,7 @@ class _PassingDataScreen1State extends State<PassingDataScreen1> {
                   message = data;
                 });
               }
-            }, 
+            },
             child: Text("Goto Screen-2")),
             Container(
               alignment: Alignment.center,

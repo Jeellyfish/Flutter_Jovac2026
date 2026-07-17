@@ -1,5 +1,6 @@
 void main(){
   print("Hello");
-  int a = 0;
-  int b = 0;
+  int a = 5;
+  int b = 10;
+  print(a + b);
 }
