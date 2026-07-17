@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:my_app/screen/zz_Tasks/smart_cafe_task.dart";
+import "package:my_app/screen/zz_Tasks/user_preferences_task.dart";
 
 void main(){
   runApp(MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         colorSchemeSeed: Colors.deepPurple,
         useMaterial3: true,
       ),
-      home: SmartCafeScreen()
+      home: UserPreferencesScreen()
     );
   }
 }
