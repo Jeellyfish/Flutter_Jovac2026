@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:my_app/screen/zz_Tasks/food_menu_task.dart";
 // import "screen/stateless_widgets.dart";
 // import "screen/statefull_widget.dart";
 // import "screen/container_widget.dart";
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
       // home: const HomeScreen3(),
       // home: const FoodCard()
       // home: const ProfileAvatarScreen(),
+      home: FoodListScreen()
     );
   }
 }
