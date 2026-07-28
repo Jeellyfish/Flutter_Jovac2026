@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:my_app/screen/zz_Tasks/user_preferences_task.dart";
-
+import "package:my_app/screen/zz_Tasks/home_screen.dart";
+import "package:my_app/screen/zz_Tasks/edit_course_screen.dart";
 void main(){
   runApp(MyApp());
 }
@@ -12,12 +12,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Smart Café',
-      theme: ThemeData(
-        colorSchemeSeed: Colors.deepPurple,
-        useMaterial3: true,
-      ),
-      home: UserPreferencesScreen()
+      title: 'Student Navigator',
+      
+      home: const HomeScreen(),
+      routes:{
+        '/edit' : (context) => const EditCourseScreen(),
+      }
     );
   }
 }
