@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/screen/zz_Tasks/student_registration_screen.dart';
+import 'screen/zz_Tasks/home_screen16.dart';
 
 void main() {
-  runApp(const StudentRegistrationApp());
+  runApp(const StudentPortalApp());
 }
 
-class StudentRegistrationApp extends StatelessWidget {
-  const StudentRegistrationApp({super.key});
+class StudentPortalApp extends StatelessWidget {
+  const StudentPortalApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Student Registration',
+      title: "Student Information Portal",
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
-        scaffoldBackgroundColor: Colors.white,
       ),
-      home: const StudentRegistrationScreen(),
+      home: const HomeScreen(),
     );
   }
 }
