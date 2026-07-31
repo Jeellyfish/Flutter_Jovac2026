@@ -1,17 +1,49 @@
 class Student {
-  final String name;
-  final String email;
-  final String mobile;
-  final String rollNo;
-  final String course;
-  final String city;
+  int? id;
+  String studentName;
+  String rollNumber;
+  String email;
+  String mobile;
+  String department;
+  String semester;
+  double cgpa;
 
   Student({
-    required this.name,
+    this.id,
+    required this.studentName,
+    required this.rollNumber,
     required this.email,
     required this.mobile,
-    required this.rollNo,
-    required this.course,
-    required this.city,
+    required this.department,
+    required this.semester,
+    required this.cgpa,
   });
+
+  // Convert Student object to Map
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'studentName': studentName,
+      'rollNumber': rollNumber,
+      'email': email,
+      'mobile': mobile,
+      'department': department,
+      'semester': semester,
+      'cgpa': cgpa,
+    };
+  }
+
+  // Convert Map to Student object
+  factory Student.fromMap(Map<String, dynamic> map) {
+    return Student(
+      id: map['id'],
+      studentName: map['studentName'],
+      rollNumber: map['rollNumber'],
+      email: map['email'],
+      mobile: map['mobile'],
+      department: map['department'],
+      semester: map['semester'],
+      cgpa: (map['cgpa'] as num).toDouble(),
+    );
+  }
 }
