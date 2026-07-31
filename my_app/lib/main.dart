@@ -1,82 +1,142 @@
-import 'dart:async';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(const AssignmentApp());
+  runApp(const PlacementApp());
 }
 
-class AssignmentApp extends StatelessWidget {
-  const AssignmentApp({super.key});
+class PlacementApp extends StatelessWidget {
+  const PlacementApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Assignment Submission",
+      title: 'Placement Registration',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
+        primarySwatch: Colors.deepPurple,
       ),
-      home: const MainScreen(),
+      home: const RegistrationScreen(),
     );
   }
 }
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _RegistrationScreenState extends State<RegistrationScreen> {
 
-  int currentIndex = 0;
+  final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController rollController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
+  final TextEditingController cgpaController = TextEditingController();
+
+  String branch = "Computer Science";
+  bool interested = true;
+
+  final List<String> branches = [
+    "Computer Science",
+    "Information Technology",
+    "Electronics",
+    "Mechanical",
+    "Civil",
+    "Electrical",
+  ];
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    loadData();
+  }
 
-    final pages = [
-      const HomeScreen(),
-      const RatingScreen(),
-      const TooltipDemoScreen(),
-    ];
+  Future<void> loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    return Scaffold(
-      body: pages[currentIndex],
+    setState(() {
+      nameController.text = prefs.getString("name") ?? "";
+      rollController.text = prefs.getString("roll") ?? "";
+      emailController.text = prefs.getString("email") ?? "";
+      mobileController.text = prefs.getString("mobile") ?? "";
+      cgpaController.text = prefs.getString("cgpa") ?? "";
+      branch = prefs.getString("branch") ?? "Computer Science";
+      interested = prefs.getBool("interest") ?? true;
+    });
+  }
 
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        selectedItemColor: Colors.indigo,
-        onTap: (index){
-          setState(() {
-            currentIndex=index;
-          });
+  Future<void> saveData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString("name", nameController.text);
+    await prefs.setString("roll", rollController.text);
+    await prefs.setString("email", emailController.text);
+    await prefs.setString("mobile", mobileController.text);
+    await prefs.setString("cgpa", cgpaController.text);
+    await prefs.setString("branch", branch);
+    await prefs.setBool("interest", interested);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Registration Saved Successfully!"),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
+
+  Future<void> clearData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    setState(() {
+      nameController.clear();
+      rollController.clear();
+      emailController.clear();
+      mobileController.clear();
+      cgpaController.clear();
+      branch = "Computer Science";
+      interested = true;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Form Cleared"),
+      ),
+    );
+  }
+
+  Widget buildTextField(
+      String label,
+      IconData icon,
+      TextEditingController controller,
+      TextInputType type,
+      ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: TextFormField(
+        controller: controller,
+        keyboardType: type,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "Required";
+          }
+          return null;
         },
-        items: const [
-
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "Home"),
-
-          BottomNavigationBarItem(
-              icon: Icon(Icons.star),
-              label: "Rating"),
-
-          BottomNavigationBarItem(
-              icon: Icon(Icons.info),
-              label: "Tooltips"),
-        ],
+        decoration: InputDecoration(
+          prefixIcon: Icon(icon,color: Colors.deepPurple),
+          labelText: label,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
       ),
     );
   }
-}
-
-class HomeScreen extends StatelessWidget {
-
-  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +144,305 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
 
       appBar: AppBar(
-        title: const Text("Assignment Submission"),
-        centerTitle: true,
+        title: const Text("Student Placement Registration"),
+        backgroundColor: Colors.deepPurple,
+      ),
+
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+
+        child: Form(
+          key: _formKey,
+
+          child: Column(
+
+            children: [
+
+              const SizedBox(height: 10),
+
+              Image.network(
+                "https://cdn-icons-png.flaticon.com/512/3135/3135755.png",
+                height: 120,
+              ),
+
+              const SizedBox(height: 15),
+
+              const Text(
+                "Register Your Details",
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.deepPurple,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              buildTextField(
+                "Student Name",
+                Icons.person,
+                nameController,
+                TextInputType.name,
+              ),
+
+              buildTextField(
+                "Roll Number",
+                Icons.badge,
+                rollController,
+                TextInputType.text,
+              ),
+
+              buildTextField(
+                "Email",
+                Icons.email,
+                emailController,
+                TextInputType.emailAddress,
+              ),
+
+              buildTextField(
+                "Mobile Number",
+                Icons.phone,
+                mobileController,
+                TextInputType.phone,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: DropdownButtonFormField<String>(
+                  value: branch,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(
+                      Icons.apartment,
+                      color: Colors.deepPurple,
+                    ),
+                    labelText: "Branch",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  items: branches.map((value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      branch = value!;
+                    });
+                  },
+                ),
+              ),
+
+              buildTextField(
+                "CGPA",
+                Icons.bar_chart,
+                cgpaController,
+                const TextInputType.numberWithOptions(decimal: true),
+              ),
+
+              const SizedBox(height: 10),
+
+              Card(
+                elevation: 2,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.work,
+                        color: Colors.deepPurple,
+                      ),
+                      const SizedBox(width: 10),
+                      const Expanded(
+                        child: Text(
+                          "Interested in Placement",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      Switch(
+                        value: interested,
+                        activeColor: Colors.deepPurple,
+                        onChanged: (value) {
+                          setState(() {
+                            interested = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              Row(
+                children: [
+
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepPurple,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      onPressed: () {
+
+                        if (_formKey.currentState!.validate()) {
+
+                          saveData();
+
+                        }
+
+                      },
+                      icon: const Icon(Icons.save,color: Colors.white),
+                      label: const Text(
+                        "SAVE DETAILS",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      onPressed: clearData,
+                      icon: const Icon(Icons.delete),
+                      label: const Text("CLEAR FORM"),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 15),
+
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                  ),
+                  onPressed: () {
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const DashboardScreen(),
+                      ),
+                    );
+
+                  },
+                  icon: const Icon(Icons.dashboard,color: Colors.white),
+                  label: const Text(
+                    "VIEW DASHBOARD",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+
+  String name = "";
+  String roll = "";
+  String email = "";
+  String mobile = "";
+  String branch = "";
+  String cgpa = "";
+  bool interested = false;
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      name = prefs.getString("name") ?? "";
+      roll = prefs.getString("roll") ?? "";
+      email = prefs.getString("email") ?? "";
+      mobile = prefs.getString("mobile") ?? "";
+      branch = prefs.getString("branch") ?? "";
+      cgpa = prefs.getString("cgpa") ?? "";
+      interested = prefs.getBool("interest") ?? false;
+    });
+  }
+
+  Future<void> deleteData() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.clear();
+
+    if (mounted) {
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Details Deleted Successfully"),
+          backgroundColor: Colors.red,
+        ),
+      );
+
+      Navigator.pop(context);
+    }
+  }
+
+  Widget detailTile(
+    IconData icon,
+    String title,
+    String value,
+  ) {
+
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: Colors.deepPurple,
+      ),
+      title: Text(title),
+      trailing: Text(
+        value,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+
+      appBar: AppBar(
+        title: const Text("Placement Dashboard"),
+        backgroundColor: Colors.deepPurple,
       ),
 
       body: SingleChildScrollView(
@@ -96,775 +453,251 @@ class HomeScreen extends StatelessWidget {
 
           children: [
 
-            const SizedBox(height: 10),
-
-            Card(
-              elevation: 6,
-
-              shape: RoundedRectangleBorder(
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: Colors.green.shade50,
                 borderRadius: BorderRadius.circular(15),
               ),
+              child: Row(
+                children: [
 
-              child: Padding(
-
-                padding: const EdgeInsets.all(16),
-
-                child: Column(
-
-                  children: [
-
-                    const Icon(
-                      Icons.assignment,
-                      size: 120,
-                      color: Colors.indigo,
+                  const CircleAvatar(
+                    radius: 28,
+                    backgroundColor: Colors.green,
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 35,
                     ),
+                  ),
 
-                    const SizedBox(height: 20),
+                  const SizedBox(width: 15),
 
-                    const Text(
-                      "Flutter Assignment",
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                      children: [
+
+                        Text(
+                          "Welcome, $name!",
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        const SizedBox(height: 5),
+
+                        const Text(
+                          "Your placement details are saved.",
+                        ),
+
+                      ],
                     ),
-
-                    const SizedBox(height: 10),
-
-                    const ListTile(
-                      leading: Icon(Icons.person),
-                      title: Text("Faculty"),
-                      subtitle: Text("Prof. Sharma"),
-                    ),
-
-                    const ListTile(
-                      leading: Icon(Icons.calendar_today),
-                      title: Text("Due Date"),
-                      subtitle: Text("15 August 2026"),
-                    ),
-
-                    const ListTile(
-                      leading: Icon(Icons.book),
-                      title: Text("Subject"),
-                      subtitle: Text("Flutter Development"),
-                    ),
-
-                    const Divider(),
-
-                    // const Padding(
-                    //   padding: EdgeInsets.all(8.0),
-                    //   child: Text(
-                    //     "Create a Flutter application demonstrating "
-                    //     "Date Picker, Time Picker, File Picker, "
-                    //     "Progress Indicator, Rating, Tooltip, "
-                    //     "WebView and Bottom Navigation.",
-                    //     textAlign: TextAlign.center,
-                    //   ),
-                    // ),
-
-                    const SizedBox(height: 15),
-
-                    SizedBox(
-                      width: double.infinity,
-
-                      child: ElevatedButton.icon(
-
-                        icon: const Icon(Icons.upload_file),
-
-                        label: const Text("Submit Assignment"),
-
-                        onPressed: () {
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const SubmissionScreen(),
-                            ),
-                          );
-
-                        },
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    SizedBox(
-                      width: double.infinity,
-
-                      child: ElevatedButton.icon(
-
-                        icon: const Icon(Icons.web),
-
-                        label: const Text("View Guidelines"),
-
-                        onPressed: () {
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const GuidelinesScreen(),
-                            ),
-                          );
-
-                        },
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    SizedBox(
-                      width: double.infinity,
-
-                      child: ElevatedButton.icon(
-
-                        icon: const Icon(Icons.language),
-
-                        label: const Text("Flutter Documentation"),
-
-                        onPressed: () {
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const FlutterDocsScreen(),
-                            ),
-                          );
-
-                        },
-                      ),
-                    ),
-
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SubmissionScreen extends StatefulWidget {
-  const SubmissionScreen({super.key});
-
-  @override
-  State<SubmissionScreen> createState() => _SubmissionScreenState();
-}
-
-class _SubmissionScreenState extends State<SubmissionScreen> {
-  DateTime? selectedDate;
-  TimeOfDay? selectedTime;
-  String fileName = "No file selected";
-
-  Future<void> pickDate() async {
-    DateTime? date = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2024),
-      lastDate: DateTime(2035),
-    );
-
-    if (date != null) {
-      setState(() {
-        selectedDate = date;
-      });
-    }
-  }
-
-  Future<void> pickTime() async {
-    TimeOfDay? time = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-
-    if (time != null) {
-      setState(() {
-        selectedTime = time;
-      });
-    }
-  }
-
-  Future<void> pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-    if (result != null) {
-      setState(() {
-        fileName = result.files.single.name;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Submit Assignment"),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const Icon(
-              Icons.assignment_turned_in,
-              size: 120,
-              color: Colors.indigo,
             ),
 
             const SizedBox(height: 20),
 
             Card(
               elevation: 5,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.calendar_today),
-                      title: const Text("Submission Date"),
-                      subtitle: Text(
-                        selectedDate == null
-                            ? "Select Date"
-                            : "${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}",
-                      ),
-                      trailing: ElevatedButton(
-                        onPressed: pickDate,
-                        child: const Text("Pick"),
-                      ),
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(15),
+              ),
+
+              child: Column(
+
+                children: [
+
+                  detailTile(
+                    Icons.person,
+                    "Student Name",
+                    name,
+                  ),
+
+                  const Divider(height: 1),
+
+                  detailTile(
+                    Icons.badge,
+                    "Roll Number",
+                    roll,
+                  ),
+
+                  const Divider(height: 1),
+
+                  detailTile(
+                    Icons.email,
+                    "Email",
+                    email,
+                  ),
+
+                  const Divider(height: 1),
+
+                  detailTile(
+                    Icons.phone,
+                    "Mobile Number",
+                    mobile,
+                  ),
+
+                  const Divider(height: 1),
+
+                  detailTile(
+                    Icons.school,
+                    "Branch",
+                    branch,
+                  ),
+
+                  const Divider(height: 1),
+
+                  detailTile(
+                    Icons.bar_chart,
+                    "CGPA",
+                    cgpa,
+                  ),
+
+                  const Divider(height: 1),
+
+                  ListTile(
+                    leading: const Icon(
+                      Icons.workspace_premium,
+                      color: Colors.deepPurple,
                     ),
 
-                    const Divider(),
+                    title:
+                        const Text("Placement Status"),
 
-                    ListTile(
-                      leading: const Icon(Icons.access_time),
-                      title: const Text("Submission Time"),
-                      subtitle: Text(
-                        selectedTime == null
-                            ? "Select Time"
-                            : selectedTime!.format(context),
-                      ),
-                      trailing: ElevatedButton(
-                        onPressed: pickTime,
-                        child: const Text("Pick"),
-                      ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+
+                        Icon(
+                          interested
+                              ? Icons.check_circle
+                              : Icons.cancel,
+                          color: interested
+                              ? Colors.green
+                              : Colors.red,
+                        ),
+
+                        const SizedBox(width: 5),
+
+                        Text(
+                          interested
+                              ? "Interested"
+                              : "Not Interested",
+                          style: TextStyle(
+                            color: interested
+                                ? Colors.green
+                                : Colors.red,
+                            fontWeight:
+                                FontWeight.bold,
+                          ),
+                        ),
+
+                      ],
                     ),
+                  ),
+                ],
+              ),
+            ),
 
-                    const Divider(),
-
-                    ListTile(
-                      leading: const Icon(Icons.upload_file),
-                      title: const Text("Assignment File"),
-                      subtitle: Text(fileName),
-                      trailing: ElevatedButton(
-                        onPressed: pickFile,
-                        child: const Text("Browse"),
-                      ),
-                    ),
-                  ],
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                ),
+                onPressed: () async {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ),
+                label: const Text(
+                  "EDIT DETAILS",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 12),
 
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                icon: const Icon(Icons.cloud_upload),
-                label: const Text("Upload Assignment"),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => SuccessScreen(
-                        fileName: fileName,
-                        date: selectedDate,
-                        time: selectedTime,
-                      ),
-                    ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                ),
+                onPressed: () async {
+
+                  bool? confirm = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("Delete Details"),
+                        content: const Text(
+                          "Are you sure you want to delete all saved placement details?",
+                        ),
+                        actions: [
+
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, false);
+                            },
+                            child: const Text("Cancel"),
+                          ),
+
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: const Text(
+                              "Delete",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+
+                        ],
+                      );
+                    },
                   );
+
+                  if (confirm == true) {
+                    deleteData();
+                  }
                 },
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SuccessScreen extends StatefulWidget {
-  final String fileName;
-  final DateTime? date;
-  final TimeOfDay? time;
-
-  const SuccessScreen({
-    super.key,
-    required this.fileName,
-    required this.date,
-    required this.time,
-  });
-
-  @override
-  State<SuccessScreen> createState() => _SuccessScreenState();
-}
-
-class _SuccessScreenState extends State<SuccessScreen> {
-  double progress = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    upload();
-  }
-
-  void upload() {
-    Timer.periodic(const Duration(milliseconds: 400), (timer) {
-      setState(() {
-        progress += 0.1;
-      });
-
-      if (progress >= 1) {
-        timer.cancel();
-
-        Future.delayed(const Duration(milliseconds: 500), () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => SubmissionSuccess(
-                fileName: widget.fileName,
-                date: widget.date,
-                time: widget.time,
-              ),
-            ),
-          );
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Uploading"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(value: progress),
-
-            const SizedBox(height: 20),
-
-            Text(
-              "${(progress * 100).toInt()} %",
-              style: const TextStyle(fontSize: 22),
-            ),
-
-            const SizedBox(height: 10),
-
-            const Text(
-              "Uploading Assignment...",
-              style: TextStyle(fontSize: 18),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SubmissionSuccess extends StatelessWidget {
-  final String fileName;
-  final DateTime? date;
-  final TimeOfDay? time;
-
-  const SubmissionSuccess({
-    super.key,
-    required this.fileName,
-    required this.date,
-    required this.time,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Submission Successful"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const SizedBox(height: 30),
-
-            const Icon(
-              Icons.check_circle,
-              color: Colors.green,
-              size: 120,
-            ),
-
-            const SizedBox(height: 20),
-
-            const Text(
-              "Assignment Submitted Successfully!",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            Card(
-              elevation: 5,
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  children: [
-
-                    ListTile(
-                      leading: const Icon(Icons.person),
-                      title: const Text("Student"),
-                      subtitle: const Text("John Doe"),
-                    ),
-
-                    const Divider(),
-
-                    ListTile(
-                      leading: const Icon(Icons.book),
-                      title: const Text("Subject"),
-                      subtitle: const Text("Flutter Development"),
-                    ),
-
-                    const Divider(),
-
-                    ListTile(
-                      leading: const Icon(Icons.calendar_today),
-                      title: const Text("Date"),
-                      subtitle: Text(
-                        date == null
-                            ? "-"
-                            : "${date!.day}/${date!.month}/${date!.year}",
-                      ),
-                    ),
-
-                    const Divider(),
-
-                    ListTile(
-                      leading: const Icon(Icons.access_time),
-                      title: const Text("Time"),
-                      subtitle: Text(
-                        time == null
-                            ? "-"
-                            : time!.format(context),
-                      ),
-                    ),
-
-                    const Divider(),
-
-                    ListTile(
-                      leading: const Icon(Icons.upload_file),
-                      title: const Text("Uploaded File"),
-                      subtitle: Text(fileName),
-                    ),
-                  ],
+                icon: const Icon(
+                  Icons.delete,
+                  color: Colors.white,
                 ),
-              ),
-            ),
-
-            const Spacer(),
-
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.star),
-                label: const Text("Rate Assignment Portal"),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const RatingScreen(),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class RatingScreen extends StatefulWidget {
-  const RatingScreen({super.key});
-
-  @override
-  State<RatingScreen> createState() => _RatingScreenState();
-}
-
-class _RatingScreenState extends State<RatingScreen> {
-
-  int rating = 4;
-
-  Widget buildStar(int index) {
-    return IconButton(
-      icon: Icon(
-        index <= rating ? Icons.star : Icons.star_border,
-        color: Colors.amber,
-        size: 40,
-      ),
-      onPressed: () {
-        setState(() {
-          rating = index;
-        });
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("You rated $rating stars"),
-          ),
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-
-      appBar: AppBar(
-        title: const Text("Rate Application"),
-      ),
-
-      body: Center(
-
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-
-            children: [
-
-              const Icon(
-                Icons.school,
-                color: Colors.indigo,
-                size: 100,
-              ),
-
-              const SizedBox(height: 20),
-
-              const Text(
-                "How was your experience?",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  5,
-                  (index) => buildStar(index + 1),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              Text(
-                "$rating / 5",
-                style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 40),
-
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.home),
-                  label: const Text("Back To Home"),
-                  onPressed: () {
-                    Navigator.popUntil(
-                      context,
-                      (route) => route.isFirst,
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class GuidelinesScreen extends StatelessWidget {
-  const GuidelinesScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = WebViewController()
-      ..loadRequest(
-        Uri.parse("https://flutter.dev/docs"),
-      );
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Assignment Guidelines"),
-      ),
-      body: WebViewWidget(controller: controller),
-    );
-  }
-}
-
-class FlutterDocsScreen extends StatelessWidget {
-  const FlutterDocsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = WebViewController()
-      ..loadRequest(
-        Uri.parse("https://flutter.dev"),
-      );
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Flutter Documentation"),
-      ),
-      body: WebViewWidget(controller: controller),
-    );
-  }
-}
-
-class TooltipDemoScreen extends StatelessWidget {
-  const TooltipDemoScreen({super.key});
-
-  Widget buildTool(
-      IconData icon,
-      String message,
-      String title,
-      ) {
-    return Card(
-      elevation: 5,
-      child: ListTile(
-        leading: Tooltip(
-          message: message,
-          child: Icon(
-            icon,
-            color: Colors.indigo,
-            size: 35,
-          ),
-        ),
-        title: Text(title),
-        subtitle: const Text(
-          "Long press or hover over the icon to see the tooltip.",
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Tooltip Demo"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(15),
-        child: ListView(
-          children: [
-
-            buildTool(
-              Icons.calendar_today,
-              "Select Submission Date",
-              "Date Picker",
-            ),
-
-            buildTool(
-              Icons.access_time,
-              "Select Submission Time",
-              "Time Picker",
-            ),
-
-            buildTool(
-              Icons.upload_file,
-              "Choose Assignment File",
-              "File Picker",
-            ),
-
-            buildTool(
-              Icons.star,
-              "Rate this Application",
-              "Rating",
-            ),
-
-            buildTool(
-              Icons.language,
-              "Open Flutter Documentation",
-              "Flutter Docs",
-            ),
-
-            buildTool(
-              Icons.assignment,
-              "Read Assignment Guidelines",
-              "Guidelines",
-            ),
-
-            const SizedBox(height: 30),
-
-            ElevatedButton.icon(
-              icon: const Icon(Icons.info),
-              label: const Text("Show SnackBar"),
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      "Tooltips help users understand icons!",
-                    ),
+                label: const Text(
+                  "DELETE DETAILS",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
-                );
-              },
+                ),
+              ),
             ),
 
-            const SizedBox(height: 20),
-
-            ElevatedButton.icon(
-              icon: const Icon(Icons.check_circle),
-              label: const Text("Finish Assignment"),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text("Assignment"),
-                    content: const Text(
-                      "Congratulations!\n\n"
-                      "You have completed the Assignment Submission Portal.",
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text("OK"),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
           ],
         ),
       ),
